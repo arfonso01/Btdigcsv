@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 from os import remove, listdir
 
-keyword = 'atomohd'
+keyword = 'trackerName'
 filter_csv = list(filter(lambda x: 'torrents.csv' in x, listdir()))
 
 if len(filter_csv) == 1:
