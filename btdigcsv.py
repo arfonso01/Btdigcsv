@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 from os import remove, listdir
 
-keyword = 'trackerName'
+keyword = 'atomohd'
 filter_csv = list(filter(lambda x: 'torrents.csv' in x, listdir()))
 
 if len(filter_csv) == 1:
@@ -41,7 +41,7 @@ def todo(npage):
         sizes = map(lambda x: x.find(class_='torrent_size').text, div_items(npage))
         hrefs = map(lambda x: x.get('href'), href_items(npage))
         
-        with open('torrents.csv', 'a', newline='') as file:
+        with open('torrents.csv', 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file, quoting=csv.QUOTE_ALL,delimiter=',')
             writer.writerows(list(zip(divs, sizes, hrefs)))
         print('Adding page ' + npage + ' to your csv')
