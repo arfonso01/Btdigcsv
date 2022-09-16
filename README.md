@@ -1,6 +1,6 @@
 # Btdigcsv 
 
-A simple script that exports the results of btdig to a csv. \
+A simple script that exports the results of [btdig ](https://btdig.com/) to a csv. \
 Works for trackers that use a naming structure like 'movie [trackerName]'
 
 ## Dependencies
