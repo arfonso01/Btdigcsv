@@ -25,10 +25,14 @@ def href_items(npage):
 def div_items(npage):
     return soup(npage).find_all('div', {'class': 'one_result'})
 
-
 def todo(npage):
     npage = str(npage)
-    torrent_age = str(soup(npage).find(class_='torrent_age').text)
+    try:
+        torrent_age = str(soup(npage).find(class_='torrent_age').text)
+    except AttributeError:
+        print('No results found, try another keyword (line 7)')
+        exit()
+
     if torrent_age == 'found 1 day ago':
         print('All pages have been added')
         exit()
