@@ -64,7 +64,7 @@ def rename_csv(npage):
         print('No results found, recovery old csv')
     except:
         if int(npage) == 0:
-            print('No results found, try another keyword (line 9)')
+            print('No results found, try another keyword (line 12)')
         else:
             print('Finished process')
 
