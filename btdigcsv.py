@@ -1,9 +1,10 @@
-import requests
+from time import sleep
 import csv
 from bs4 import BeautifulSoup
 import re
 from os import rename, remove
 from functools import lru_cache
+from twill.commands import go, fv, submit, show
 
 keyword = 'trackerName'
 
@@ -19,16 +20,18 @@ def saving_oldcsv():
         remove('.torrents.old')
     except FileNotFoundError:
         rename_oldcsv()
-        
-def url_generated(npage):
-    return 'https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.pet/search?q=' + keyword + '&p=' + npage + '&order=2'
 
+@lru_cache
 def requests_generated(npage):
-    return requests.get(url_generated(npage))
+    print('Generating requests')
+    sleep(5)
+    go_web = go('https://btdig.com/search?q=' + keyword + '&p=' + npage + '&order=2')
+    show_web = show()
+    return show_web
 
 @lru_cache(maxsize=128)
 def soup (npage):
-    return BeautifulSoup(requests_generated(npage).text, 'html.parser')
+    return BeautifulSoup(requests_generated(npage), 'html.parser')
 
 def href_items(npage):
     return soup(npage).find_all('a', attrs={'href': re.compile("^magnet:")})
@@ -42,13 +45,14 @@ def list_created(npage):
     magnet = map(lambda x: x.get('href'), href_items(npage))
     return list(zip(title, size, magnet))
 
+
 def rename_csv(npage):
     try:
         rename(".torrents.old", "torrents.csv")
         print('No results found, recovery old csv')
     except:
         if int(npage) == 0:
-            print('No results found, try another keyword (line 7)')
+            print('No results found, try another keyword (line 9)')
         else:
             print('Finished process')
 
