@@ -9,8 +9,6 @@ from time import sleep
 import twill.commands as tc
 from bs4 import BeautifulSoup
 
-keyword = 'atomohd'
-
 keyword = 'trackerName'
 
 def rename_oldcsv():
