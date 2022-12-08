@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 from os import rename, remove
 from functools import lru_cache
-from twill.commands import go, fv, submit, show
+from twill.commands import go, show
 
 keyword = 'trackerName'
 
