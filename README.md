@@ -25,12 +25,12 @@ first uses a tor2web version and the second uses the original website whose requ
 - Step 1: Install and run [Flaresolverr](https://github.com/FlareSolverr/FlareSolverr). \
 I recommend using the docker image and its daemon so that it is always available.
 
-    docker run -d \
-      --name=flaresolverr \
-      -p 8191:8191 \
-      -e LOG_LEVEL=info \
-      --restart unless-stopped \
-      ghcr.io/flaresolverr/flaresolverr:latest
+      docker run -d \
+        --name=flaresolverr \
+        -p 8191:8191 \
+        -e LOG_LEVEL=info \
+        --restart unless-stopped \
+        ghcr.io/flaresolverr/flaresolverr:latest
 
 - Step 2: Edit the keyword variable (line 9) to 'trackerName'
 - Step 3: Run the python script
