@@ -1,15 +1,16 @@
+import requests
 from time import sleep
 import csv
-import re
-from functools import lru_cache
-from io import StringIO
-from os import rename, remove
-from time import sleep
-
-import twill.commands as tc
 from bs4 import BeautifulSoup
+import re
+from os import rename, remove
+from functools import lru_cache
 
-keyword = 'trackerName'
+keyword = 'wolfmax4k'
+
+header = {
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+}
 
 def rename_oldcsv():
     try:
@@ -18,38 +19,28 @@ def rename_oldcsv():
     except FileNotFoundError:
         print('Starting search')
 
-
 def saving_oldcsv():
     try:
         remove('.torrents.old')
     except FileNotFoundError:
         rename_oldcsv()
 
-
 @lru_cache
 def requests_generated(npage):
     print('Generating requests')
-    html = StringIO()
-    tc.set_output(html)
     sleep(5)
-    tc.go('https://btdig.com/search?q=' + keyword + '&p=' + npage + '&order=2')
-    tc.show()
-    tc.set_output()
-    return html.getvalue()
-
+    url = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.pet/search?q=' + keyword + '&p=' + npage + '&order=2'
+    return requests.get(url, headers=header).text
 
 @lru_cache(maxsize=128)
-def soup(npage):
-    return BeautifulSoup(requests_generated(npage), 'html.parser')
-
+def soup (npage):
+    return BeautifulSoup(requests_generated(npage), 'lxml')
 
 def href_items(npage):
     return soup(npage).find_all('a', attrs={'href': re.compile("^magnet:")})
 
-
 def div_items(npage):
     return soup(npage).find_all('div', {'class': 'one_result'})
-
 
 def list_created(npage):
     title = map(lambda x: x.find(class_='torrent_name').text, div_items(npage))
@@ -64,19 +55,17 @@ def rename_csv(npage):
         print('No results found, recovery old csv')
     except:
         if int(npage) == 0:
-            print('No results found, try another keyword (line 12)')
+            print('No results found, try another keyword (line 7)')
         else:
             print('Finished process')
-
 
 def torrent_age(npage):
     try:
         return str(soup(npage).find(class_='torrent_age').text)
+        # return str(requests_generated(npage).find(class_='torrent_age').text)
     except AttributeError:
-        print('error gordo')
         rename_csv(npage)
         exit()
-
 
 def listo_csv(npage):
     npage = str(npage)
@@ -87,11 +76,10 @@ def listo_csv(npage):
         writer = csv.writer(file, quoting=csv.QUOTE_ALL, delimiter=',')
         writer.writerows(list_created(npage))
     print('Adding page ' + npage + ' to your csv')
-
+    
     npage = int(npage)
     npage += 1
     listo_csv(npage)
-
 
 saving_oldcsv()
 
